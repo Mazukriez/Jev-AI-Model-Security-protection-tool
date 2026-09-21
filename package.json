@@ -1,12 +1,1 @@
-{
-  "name": "jevshield",
-  "version": "0.1.0",
-  "description": "Open-source security protection layer for Jev AI decision workflows",
-  "private": false,
-  "type": "module",
-  "scripts": {
-    "test": "node --test",
-    "lint": "echo "lint placeholder: configure project linter""
-  },
-  "engines": { "node": ">=20" }
-}
+{"name":"jevshield","version":"0.1.0","description":"Open-source security protection layer for Jev AI decision workflows","private":false,"type":"module","scripts":{"test":"node --test","lint":"echo \"lint placeholder: configure project linter\""},"engines":{"node":">=20"}}
