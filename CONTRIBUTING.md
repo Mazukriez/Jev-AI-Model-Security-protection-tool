@@ -1,0 +1,1 @@
+Contribute detectors, policy packs, adversarial fixtures, CI integrations and documentation. Include tests and never commit secrets or customer data.
