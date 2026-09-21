@@ -1,12 +1,1 @@
-const test = require('node:test');
-const assert = require('node:assert/strict');
-
-function decide(findings) {
-  if (findings.some(f => f.severity === 'critical')) return 'BLOCK';
-  if (findings.some(f => f.severity === 'high' || f.severity === 'medium')) return 'REVIEW';
-  return 'ALLOW';
-}
-
-test('critical finding blocks', () => assert.equal(decide([{severity:'critical'}]), 'BLOCK'));
-test('high finding requires review', () => assert.equal(decide([{severity:'high'}]), 'REVIEW'));
-test('low-only findings allow', () => assert.equal(decide([{severity:'low'}]), 'ALLOW'));
+const test=require('node:test');const assert=require('node:assert/strict');function decide(f){if(f.some(x=>x.severity==='critical'))return'BLOCK';if(f.some(x=>x.severity==='high'||x.severity==='medium'))return'REVIEW';return'ALLOW'}test('critical blocks',()=>assert.equal(decide([{severity:'critical'}]),'BLOCK'));test('high reviews',()=>assert.equal(decide([{severity:'high'}]),'REVIEW'));test('low allows',()=>assert.equal(decide([{severity:'low'}]),'ALLOW'));
