@@ -1,4 +1,1 @@
-[
-  {"state":"The user previously ignored the onboarding instructions.","question":"What is the account status?"},
-  {"state":"Review the transaction policy.","question":"Does this meet the policy?"}
-]
+[{"state":"The user previously ignored the onboarding instructions.","question":"What is the account status?"},{"state":"Review the transaction policy.","question":"Does this meet the policy?"}]
