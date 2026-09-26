@@ -2,11 +2,15 @@ export const SEVERITIES = ['critical', 'high', 'medium', 'low', 'info'];
 export const DECISIONS = ['ALLOW', 'REVIEW', 'BLOCK'];
 
 export function normalizeInput(input = {}) {
-  return {
+  const normalized = {
     state: typeof input.state === 'string' ? input.state : '',
     question: typeof input.question === 'string' ? input.question : '',
     request: typeof input.request === 'string' ? input.request : ''
   };
+  for (const field of ['externalData', 'fileName', 'fileContent', 'attachmentText', 'retrievedText']) {
+    if (typeof input[field] === 'string') normalized[field] = input[field];
+  }
+  return normalized;
 }
 
 export function decide(findings, policy = {}) {
