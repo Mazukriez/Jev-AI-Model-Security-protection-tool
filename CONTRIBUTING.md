@@ -1,59 +1,21 @@
 # Contributing to JevShield
 
-Thank you for helping build open security tooling for AI decision systems.
+Thank you for helping build open security tooling for AI decision workflows.
 
-## First contribution
+## Local workflow
 
-1. Fork the repository.
-2. Create a focused branch:
-   `git checkout -b feat/my-detector`
-3. Make one focused change.
-4. Add or update tests.
-5. Run `npm test` and `npm run lint`.
-6. Update documentation when behavior changes.
-7. Open a pull request using the PR template.
+```bash
+npm install
+npm test
+npm run lint
+```
 
-## Good first contributions
+Create a focused branch and use a conventional commit prefix such as `feat:`, `security:`, `test:`, or `docs:`.
 
-- Add a detector
-- Add a benign fixture
-- Add an adversarial fixture
-- Improve documentation
-- Add a policy example
-- Improve CI
-- Add an integration example
+## Detector requirements
 
-## Security detector requirements
-
-Every detector should document:
-
-- Threat being detected
-- Input assumptions
-- Detection logic
-- Expected false positives
-- Expected false negatives
-- Severity rationale
-- Regression fixtures
-
-A detector must not silently transform uncertain evidence into an automatic BLOCK without a documented policy rule.
-
-## Testing
-
-Security changes should include both malicious and benign examples. A good detector demonstrates what it catches and what it intentionally does not catch.
+Each detector must document the threat and input assumptions, detection logic and matching limits, severity rationale, expected false positives and false negatives, adversarial and benign regression fixtures, and any privacy impact of evidence fields. Detectors must be deterministic, side-effect free, dependency-light, and safe with malformed input. Never commit real credentials, customer data, production logs, or proprietary model outputs.
 
 ## Pull requests
 
-Keep PRs small and reviewable. Include:
-
-- Problem statement
-- Threat model
-- Implementation
-- Tests
-- Documentation
-- Limitations
-
-Never commit credentials, customer information, proprietary model data or production logs.
-
-## Code of conduct
-
-By participating, you agree to [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
+Include the problem statement, threat-model impact, tests, limitations, and documentation changes. Security-sensitive changes require maintainer review. Keep changes small enough for community review. Do not open a public issue for an exploitable vulnerability; follow [SECURITY.md](SECURITY.md).

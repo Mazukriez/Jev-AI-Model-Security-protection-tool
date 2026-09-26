@@ -1,52 +1,33 @@
 # Architecture
 
-```
-Untrusted state/question
-        |
-        v
-+-------------------+
-| JevShield Scanner |
-+---------+---------+
-          |
-   +------+------+------+
-   |             |      |
-Injection      Secret   PII
-Detector      Detector Detector
-   |             |      |
-   +------+------+------+
-          |
-          v
-    Policy Engine
-          |
-    +-----+-----+
-    |     |     |
-  ALLOW REVIEW BLOCK
-          |
-          v
-      Jev Adapter
-          |
-          v
-    Typed AI Decision
+```text
+untrusted state / question / request
+              |
+              v
+      normalizeInput()
+              |
+              v
+     +-------------------+
+     | detector pipeline |
+     +----+----+----+----+
+          |    |    |
+      injection secret privacy + size
+          \    |    /
+           v   v   v
+        structured findings
+              |
+              v
+        deterministic policy
+        ALLOW / REVIEW / BLOCK
+              |
+              v
+       Jev/provider adapter
 ```
 
-## Principles
+## Boundaries
 
-### Separate detection from enforcement
+Detection is evidence. Detectors return structured findings and must not execute actions. Policy is enforcement: it maps severity to an application decision and is independently testable. Provider credentials, network calls, retries, and output validation belong outside the scanner core. If a security check is unavailable, callers must fail closed rather than report successful validation. Raw state is not returned or logged by default; evidence is opt-in and truncated.
 
-Detectors return evidence. Policies decide what that evidence means.
+## Adding a detector
 
-### Fail safely
-
-Provider/API failures must not be represented as successful security validation.
-
-### Minimize sensitive data
-
-The scanner should avoid logging raw secrets or unnecessary personal data.
-
-### Extensibility
-
-New detectors should not require rewriting the core scanner.
-
-### Reproducibility
-
-Security behavior should be backed by versioned fixtures and regression tests.
+Export a function with the shape `(normalizedInput, options) => Finding[]`, pass it through `scan(..., { detectors: [...] })`, and add paired adversarial/benign fixtures. Do not mutate input, call external services, or include secrets in test data.
