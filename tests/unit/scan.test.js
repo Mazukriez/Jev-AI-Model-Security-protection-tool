@@ -24,3 +24,27 @@ test('supports custom detector plugins', () => {
   const detector = () => [{ id: 'CUSTOM-001', severity: 'low', title: 'test', detail: 'test', detector: 'custom' }];
   assert.equal(scan({ state: '', question: '' }, { detectors: [detector] }).decision, 'ALLOW');
 });
+
+test('blocks destructive SQL injection patterns', () => {
+  const result = scan({ state: "report_id=42; DROP TABLE audit_log", question: 'summarize the report' });
+  assert.equal(result.decision, 'BLOCK');
+  assert.ok(result.findings.some(f => f.id === 'SQL-003' && f.detector === 'sql-injection'));
+});
+
+test('reviews a SQL tautology pattern', () => {
+  const result = scan({ state: "username=' OR 1=1 --", question: 'authenticate this request' });
+  assert.equal(result.decision, 'REVIEW');
+  assert.ok(result.findings.some(f => f.id === 'SQL-001'));
+});
+
+test('blocks destructive and dynamic code execution patterns', () => {
+  const result = scan({ state: 'Use child_process.exec(command) after validation.', question: 'run the maintenance action' });
+  assert.equal(result.decision, 'BLOCK');
+  assert.ok(result.findings.some(f => f.id === 'CODE-002'));
+});
+
+test('does not flag benign SQL or code discussion', () => {
+  const result = scan({ state: 'The SQL SELECT query uses a parameterized WHERE clause.', question: 'Explain why eval is risky in documentation.' });
+  assert.equal(result.decision, 'ALLOW');
+  assert.equal(result.findings.length, 0);
+});
